@@ -2,8 +2,12 @@ from django.shortcuts import render
 from django.views.generic import TemplateView   
 
 
-def home(request):
-    return render(request, "core/home.html")
+class home(TemplateView):
+    template_name = 'core/home.html'
 
-def sample(request):
-    return render(request, "core/sample.html")
+    def get(self,request,*args,**kwargs):
+        return render(self.request,self.template_name,{'title':'My super web playground'})
+    
+
+class sample(TemplateView):
+    template_name = 'core/sample.html'
