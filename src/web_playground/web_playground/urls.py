@@ -24,5 +24,9 @@ urlpatterns = [
     #pages views
     path('pages/',include(pages_patterns)),
 
+    #admin path [default]
     path('admin/', admin.site.urls),
+
+    #path del auth [for the registration/login page] for the registration app
+    path('accounts/',include('django.contrib.auth.urls'))
 ]

@@ -1,18 +1,16 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block title %}Actualizar página{% endblock %}
+{% block title %}Borrar página{% endblock %}
 {% block content %}
 {% include 'pages/includes/page_menu.html'%}
 <main role="main">
   <div class="container">
-    <div class="row mt-3 mb-5">
+    <div class="row mt-3">
       <div class="col-md-9 mx-auto">
-        <div class = "form-group">
+        <div>
             <form action="" method="post">{% csrf_token %}
-                    {{ form.as_p}}
-                <div class="text-center">
-                  <input class="btn btn-primary btn-block" type="submit" value="crear página" />
-                </div>            
+                <p>Are you sure you want to delete <b>"{{ object }}"</b>?</p>
+                <input class="btn btn-primary btn-block" type="submit" value="yes, delete page" />
             </form>
         </div>
       </div>
