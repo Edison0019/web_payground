@@ -28,5 +28,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #path del auth [for the registration/login page] for the registration app
-    path('accounts/',include('django.contrib.auth.urls'))
+    path('accounts/',include('django.contrib.auth.urls')),
+
+    #url pattern for the registration app
+    path('accounts/',include('registration.urls')),
 ]

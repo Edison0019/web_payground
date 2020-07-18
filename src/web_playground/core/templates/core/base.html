@@ -35,7 +35,15 @@
             {% if  not request.user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">
-                  Acceder
+                  Login
+                </a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="#">|</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'signup' %}">
+                  Signup
                 </a>
               </li>
             {% else %}
