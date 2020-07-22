@@ -1,4 +1,4 @@
-from .forms import FormWithEmail
+from .forms import FormWithEmail, RegistrationForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django import forms
@@ -25,8 +25,7 @@ class SignUpView(CreateView):
 @method_decorator(login_required,name='dispatch')
 class CreateProfile(UpdateView):
     template_name = 'registration/profile_form.html'
-    model = Profile
-    fields =['avatar','bio','link']
+    form_class = RegistrationForm
     success_url = reverse_lazy('profile')
 
     def get_object(self):
