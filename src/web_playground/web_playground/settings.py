@@ -124,7 +124,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # auth redirect user
-# LOGIN_REDIRECT_URL = 'pages:pages'
+LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = 'home'
 
 #email configuration

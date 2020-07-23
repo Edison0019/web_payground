@@ -23,6 +23,11 @@
               <input type="file" name="avatar" class="form-control-file mt-3" id="id_avatar">
               {{ form.bio }}
               {{ form.link }}
+              <input value="{{request.user.email}}" class = "form-control mt-3" readonly>
+              <p class="mt-3">
+                If you wish to create update your email <a href="{% url 'profile_email' %}">click here</a>.<br>
+                If you wish to update your password <a href="{% url 'password_change' %}">click here</a>.
+              </p>
               <input type="submit" class="btn btn-primary btn-block mt-3" value="Actualizar">
             </div>
           </div>

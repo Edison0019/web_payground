@@ -1,4 +1,4 @@
-from .forms import FormWithEmail, RegistrationForm
+from .forms import FormWithEmail, RegistrationForm, UpdateEmail
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django import forms
@@ -32,3 +32,18 @@ class CreateProfile(UpdateView):
         #getting the request from the user in order to 
         profile, created =  Profile.objects.get_or_create(user=self.request.user)
         return profile
+    
+@method_decorator(login_required,name='dispatch')
+class UpdateEmailView(UpdateView):
+    template_name = 'registration/profile_email_form.html'
+    form_class = UpdateEmail
+    success_url = reverse_lazy('profile')
+
+    def get_object(self):
+        #getting the request from the user in order to 
+        return self.request.user
+    
+    def get_form(self,form_class=None):
+        form = super(UpdateEmailView,self).get_form()
+        form.fields['email'].widget = forms.EmailInput(attrs={'class':'form-control mb-2','placeholder':'Enter new email'})
+        return form  
