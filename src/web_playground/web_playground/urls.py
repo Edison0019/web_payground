@@ -33,6 +33,9 @@ urlpatterns = [
 
     #url pattern for the registration app
     path('accounts/',include('registration.urls')),
+
+    #profiles app
+    path('profiles/',include('profiles.urls')),
 ]
 
 if settings.DEBUG:
