@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'pages.apps.PagesConfig',
     'profiles',
+    'messanger',
 ]
 
 MIDDLEWARE = [

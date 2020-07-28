@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404
 class ProfileList(ListView):
     model = Profile
     template_name = "profiles/profile_list.html"
+    #this attribute allows us to use pagination in django by assigning the number of
+    #instances to be returned per each page as below
+    paginate_by = 4
 
 class ProfileDetail(DetailView):
     model = Profile

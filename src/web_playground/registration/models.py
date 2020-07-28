@@ -18,6 +18,9 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.user)
 
+    class Meta:
+        ordering = ['user__username']
+
 @receiver(post_save,sender=User)
 def profile_creation_signal(sender,instance, **kwargs):
     if kwargs.get('created',False): #this to make sure that the action is executed the first time the instance is created
