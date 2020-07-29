@@ -36,6 +36,9 @@ urlpatterns = [
 
     #profiles app
     path('profiles/',include('profiles.urls')),
+
+    #profiles app
+    path('messages/',include('messanger.urls')),
 ]
 
 if settings.DEBUG:
