@@ -9,6 +9,7 @@ class MessangerTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user('user1',None,'test1234')
         self.user2 = User.objects.create_user('user2',None,'test1234')
+        self.user3 = User.objects.create_user('user3',None,'test1234')
 
         self.thread = Thread.objects.create()
 
@@ -33,3 +34,22 @@ class MessangerTest(TestCase):
         self.assertEqual(len(self.thread.message.all()),2)
         for m in self.thread.message.all():
             print('({}): {}'.format(m.user,m.content))
+    
+    def test_user_not_thread(self):
+        self.thread.users.add(self.user2,self.user1)
+        message1 = Message.objects.create(user=self.user1,content='hola querido amigo')
+        message2 = Message.objects.create(user=self.user2,content='hace mucho que no sabia de ti')
+        message3 = Message.objects.create(user=self.user3,content='soy un espia')
+        self.thread.message.add(message1,message2,message3)
+        self.assertEqual(len(self.thread.message.all()),2)
+
+    
+    def test_find_thread_custom_manager(self):
+        self.thread.users.add(self.user1,self.user2)
+        thread = Thread.objects.find(self.user1,self.user2)
+        self.assertEqual(thread,self.thread)
+
+    def test_find_or_create_thread_custom_manager(self):
+        self.thread.users.add(self.user1,self.user2)
+        thread = Thread.objects.find_or_create(self.user1,self.user3)
+        self.assertIsNotNone(thread)
