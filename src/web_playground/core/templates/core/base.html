@@ -33,6 +33,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile_list' %}">Profiles</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'message_list' %}">Messages</a>
+              </li>
             </ul>
             <ul class="navbar-nav">
             {% if  not request.user.is_authenticated %}

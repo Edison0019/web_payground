@@ -18,7 +18,7 @@
             <!-- Con una búsqueda inversa user.threads también podemos conseguir los hilos de un usuario -->
             {% for thread in request.user.threads.all %}
               <!-- Sólo mostraremos un Thread si tiene como mínimo 1 mensaje -->
-              {% if thread.messages.all|length > 0 %}
+              {% if thread.message.all|length > 0 %}
                 <div class="mb-3">
                   <!-- Recorremos los miembros del hilo menos el propio request.user -->
                   {% for user in thread.users.all %}
@@ -27,12 +27,12 @@
                       {% if user.profile.avatar %}
                         <img src="{{user.profile.avatar.url}}" class="avatar">
                       {% else %}
-                        <img src="{% static 'registration/img/no-avatar.jpg' %}" class="avatar">
+                        <img src="{% static 'img/no-avatar.jpg' %}" class="avatar">
                       {% endif %}
                       <!-- Mostramos la información del miembro --> 
                       <div>
-                        <a href="{% url 'messenger:detail' thread.pk %}">{{user}}</a><br>
-                        <small><i>Hace {{thread.messages.last.created|timesince}}</i></small>
+                        <a href="{% url 'message_detail' thread.pk %}">{{user}}</a><br>
+                        <small><i>Hace {{thread.message.last.created|timesince}}</i></small>
                       </div>
                     {% endif %}
                   {% endfor %}
@@ -45,20 +45,46 @@
             <!-- Recorremos los miembros del hilo menos el propio request.user -->
             {% for user in thread.users.all %}
               {% if user != request.user %}       
-                <h4 class="mb-4">Mensajes con <a href="{% url 'profiles:detail' user %} ">{{user}}</a></h4>
+                <h4 class="mb-4">Mensajes con <a href="{% url 'profile_detail' user %} ">{{user}}</a></h4>
               {% endif %}
             {% endfor %}
             <!-- Mostramos los mensajes en una capa que tiene un overflow vertical de 300 píxeles -->
             <div class="thread" id="thread">
-              {% for message in object.messages.all %}
+              {% for message in object.message.all %}
                 <!-- Dependiendo del usuario asignamos una clase con un color de fondo u otro en el mensaje -->
                 <div {% if request.user == message.user %}class="mine mb-3"{% else %}class="other mb-3"{% endif %}>
-                  <small><i>Hace {{thread.messages.last.created|timesince}}</i></small><br>
+                  <small><i>Hace {{thread.message.last.created|timesince}}</i></small><br>
                   {{message.content}}
                 </div>
               {% endfor %}
             </div>
             <!-- Aquí crearemos el formulario -->
+            <textarea id="message" class = "form-control mb-2" rows="2" placeholder="write your message here"></textarea>
+            <button id="send" class = "btn btn-primary btn-sm btn-block" disabled>Peticion de prueba</button>
+            <script>
+                var button = document.getElementById('send');
+                button.addEventListener("click",function(){
+                  //the encode part is to make sure that the message is encoded and url components are scaped
+                  let content = encodeURIComponent(document.getElementById('message').value);
+                  if(content.length > 0){
+                    const url = "{% url 'add' thread.pk %}" + "?content=" + content
+                    //this method is for calling the async method for interacting with the server
+                    fetch(url,{'credentials':'include'}).then(response => response.json()).then((data) =>{
+                      alert(data.created);
+                    })
+                  }
+                })
+
+                //adding an event to enable the button if the user inputs information in in
+                let area = document.getElementById('message');
+                area.addEventListener('keyup',()=>{
+                  if(this.value > 0){
+                    button.disabled = true;
+                  }else{
+                    button.disabled = false;
+                  }
+                })
+            </script>
           </div>
         </div>
     </div>
