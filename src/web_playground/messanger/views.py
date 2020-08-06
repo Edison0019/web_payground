@@ -6,7 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.http import Http404,JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy 
+from django.contrib.auth.models import User
+
 
 # Create your views here.
 @method_decorator(login_required,name='dispatch')
@@ -38,6 +41,13 @@ def add_message(request,pk):
             #this part here is for adding the message to the thread
             thread.message.add(message)
             response['created'] = 'True'
+            if len(thread.message.all()) == 1:
+                response['first'] = 'True'
     else:
         raise Http404('User not authenticated')
     return JsonResponse(response,safe=False)
+
+def createThread(request,username):
+    user = get_object_or_404(User,username = username)
+    thread = Thread.objects.find_or_create(user,request.user)
+    return redirect(reverse_lazy('message_detail',args=[thread.pk]))

@@ -60,7 +60,7 @@
             </div>
             <!-- Aquí crearemos el formulario -->
             <textarea id="message" class = "form-control mb-2" rows="2" placeholder="write your message here"></textarea>
-            <button id="send" class = "btn btn-primary btn-sm btn-block" disabled>Peticion de prueba</button>
+            <button id="send" class = "btn btn-primary btn-sm btn-block" disabled>Enviar mensaje</button>
             <script>
                 var button = document.getElementById('send');
                 button.addEventListener("click",function(){
@@ -70,7 +70,22 @@
                     const url = "{% url 'add' thread.pk %}" + "?content=" + content
                     //this method is for calling the async method for interacting with the server
                     fetch(url,{'credentials':'include'}).then(response => response.json()).then((data) =>{
-                      alert(data.created);
+                      if(data.created){
+                        //estructura del mensaje
+                        var message = document.createElement('div');
+                        message.classList.add('mine','mb-3')
+                        message.innerHTML = '<small><i>hace unos segundos</i></small></br>'+decodeURIComponent(content)
+                        thread = document.getElementById('thread')
+                        thread.appendChild(message)
+                        document.getElementById('message').value = ''
+                        ScrollDown()
+                        if(data.first){
+                          window.location.href = "{% url 'message_detail' thread.pk %}"
+                        }
+                        button.disabled = true;
+                      }else{
+                        console.log('error');
+                      }
                     })
                   }
                 })
@@ -84,6 +99,13 @@
                     button.disabled = false;
                   }
                 })
+
+                //keeping the scroll to the last message
+                function ScrollDown(){
+                  var thread = document.getElementById('thread');
+                  thread.scrollTop = thread.scrollHeight;
+                }
+                ScrollDown()
             </script>
           </div>
         </div>

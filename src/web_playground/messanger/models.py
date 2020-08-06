@@ -8,7 +8,7 @@ class Message(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,)
     content = models.TextField(verbose_name='Message')
     # active = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['created']
@@ -37,8 +37,11 @@ class ThreadManager(models.Manager):
 class Thread(models.Model):
     users = models.ManyToManyField(User,related_name='threads')
     message = models.ManyToManyField(Message)
-
+    updated = models.DateTimeField(auto_now=True)
     objects = ThreadManager()
+
+    class Meta:
+        ordering = ['-updated']
 
 def message_change(sender,**kwargs):
     instance = kwargs.pop('instance',None)
@@ -57,5 +60,6 @@ def message_change(sender,**kwargs):
 
     #this part deletes the not allowed messages from pk.set using a python built in method
     pk_set.difference_update(not_allowed_messages)
+    instance.save()
 
 m2m_changed.connect(message_change,sender=Thread.message.through)
